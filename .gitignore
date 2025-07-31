@@ -109,3 +109,4 @@ Thumbs.db
 prisma/migrations/
 prisma/*.db
 prisma/*.db-journal 
+TODO_SORTEIA_MAIS.md
