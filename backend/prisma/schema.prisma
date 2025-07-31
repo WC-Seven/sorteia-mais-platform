@@ -1,0 +1,364 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ========================================
+// MODELOS PRINCIPAIS
+// ========================================
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String?
+  role      UserRole @default(USER)
+  avatar    String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relacionamentos
+  rifasCreated     Rifa[]           @relation("RifaCreator")
+  vaquinhasCreated Vaquinha[]       @relation("VaquinhaCreator")
+  sorteiosCreated  Sorteio[]        @relation("SorteioCreator")
+  participations   Participation[]
+  contributions    Contribution[]
+  payments         Payment[]
+  payouts          PayoutRequest[]
+  affiliate        Affiliate?
+  subscription     Subscription?
+  notifications    Notification[]
+  logs             Log[]
+
+  @@map("users")
+}
+
+model Rifa {
+  id            String      @id @default(cuid())
+  title         String
+  description   String?
+  pricePerTicket Float
+  totalTickets  Int?
+  currentTicket Int         @default(0)
+  prize         String?
+  status        RifaStatus  @default(ACTIVE)
+  imageUrl      String?
+  endDate       DateTime?
+  createdBy     String
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  // Relacionamentos
+  creator       User           @relation("RifaCreator", fields: [createdBy], references: [id])
+  participations Participation[]
+  sorteio       Sorteio?
+
+  @@map("rifas")
+}
+
+model Vaquinha {
+  id              String        @id @default(cuid())
+  title           String
+  description     String?
+  goal            Float
+  currentAmount   Float         @default(0)
+  platformFeeRate Float         @default(0.05) // 5%
+  platformFee     Float         @default(0)
+  netToCreator    Float         @default(0)
+  status          VaquinhaStatus @default(ACTIVE)
+  imageUrl        String?
+  endDate         DateTime?
+  createdBy       String
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  // Relacionamentos
+  creator        User           @relation("VaquinhaCreator", fields: [createdBy], references: [id])
+  contributions  Contribution[]
+
+  @@map("vaquinhas")
+}
+
+model Sorteio {
+  id          String       @id @default(cuid())
+  title       String
+  description String?
+  prize       String
+  maxParticipants Int?
+  currentParticipants Int   @default(0)
+  entryPrice  Float
+  status      SorteioStatus @default(ACTIVE)
+  winnerId    String?
+  winnerName  String?
+  drawnAt     DateTime?
+  rifaId      String?      @unique
+  createdBy   String
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  // Relacionamentos
+  creator     User         @relation("SorteioCreator", fields: [createdBy], references: [id])
+  rifa        Rifa?        @relation(fields: [rifaId], references: [id])
+
+  @@map("sorteios")
+}
+
+// ========================================
+// MODELOS DE PARTICIPAÇÃO
+// ========================================
+
+model Participation {
+  id        String   @id @default(cuid())
+  userId    String
+  rifaId    String
+  quantity  Int
+  totalPaid Float
+  status    PaymentStatus @default(PENDING)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relacionamentos
+  user      User     @relation(fields: [userId], references: [id])
+  rifa      Rifa     @relation(fields: [rifaId], references: [id])
+
+  @@unique([userId, rifaId])
+  @@map("participations")
+}
+
+model Contribution {
+  id          String   @id @default(cuid())
+  userId      String
+  vaquinhaId  String
+  amount      Float
+  message     String?
+  isAnonymous Boolean  @default(false)
+  status      PaymentStatus @default(PENDING)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relacionamentos
+  user        User       @relation(fields: [userId], references: [id])
+  vaquinha    Vaquinha   @relation(fields: [vaquinhaId], references: [id])
+
+  @@map("contributions")
+}
+
+// ========================================
+// MODELOS DE PAGAMENTO
+// ========================================
+
+model Payment {
+  id            String        @id @default(cuid())
+  userId        String
+  amount        Float
+  method        PaymentMethod
+  status        PaymentStatus @default(PENDING)
+  pixCode       String?
+  pixQrCode     String?
+  stripePaymentId String?
+  mercadoPagoId String?
+  description   String?
+  metadata      Json?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  // Relacionamentos
+  user          User          @relation(fields: [userId], references: [id])
+
+  @@map("payments")
+}
+
+model PayoutRequest {
+  id          String   @id @default(cuid())
+  userId      String
+  amount      Float
+  pixKey      String
+  pixKeyType  PixKeyType
+  status      PayoutStatus @default(PENDING)
+  processedAt DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relacionamentos
+  user        User     @relation(fields: [userId], references: [id])
+
+  @@map("payout_requests")
+}
+
+// ========================================
+// MODELOS DE AFILIADOS
+// ========================================
+
+model Affiliate {
+  id            String   @id @default(cuid())
+  userId        String   @unique
+  code          String   @unique
+  commissionRate Float   @default(0.10) // 10%
+  totalEarnings Float   @default(0)
+  totalPaid     Float   @default(0)
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relacionamentos
+  user          User     @relation(fields: [userId], references: [id])
+
+  @@map("affiliates")
+}
+
+// ========================================
+// MODELOS DE ASSINATURAS
+// ========================================
+
+model Plan {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?
+  price       Float
+  duration    Int      // em dias
+  features    Json     // array de features
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relacionamentos
+  subscriptions Subscription[]
+
+  @@map("plans")
+}
+
+model Subscription {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  planId    String
+  status    SubscriptionStatus @default(ACTIVE)
+  startDate DateTime @default(now())
+  endDate   DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relacionamentos
+  user      User     @relation(fields: [userId], references: [id])
+  plan      Plan     @relation(fields: [planId], references: [id])
+
+  @@map("subscriptions")
+}
+
+// ========================================
+// MODELOS DE SISTEMA
+// ========================================
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  title     String
+  message   String
+  type      NotificationType
+  isRead    Boolean  @default(false)
+  metadata  Json?
+  createdAt DateTime @default(now())
+
+  // Relacionamentos
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@map("notifications")
+}
+
+model Log {
+  id        String   @id @default(cuid())
+  userId    String?
+  action    String
+  resource  String?
+  resourceId String?
+  details   Json?
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  // Relacionamentos
+  user      User?    @relation(fields: [userId], references: [id])
+
+  @@map("logs")
+}
+
+// ========================================
+// ENUMS
+// ========================================
+
+enum UserRole {
+  USER
+  PRO
+  PRO_PLUS
+  ADMIN
+}
+
+enum RifaStatus {
+  ACTIVE
+  ENDED
+  CANCELLED
+}
+
+enum VaquinhaStatus {
+  ACTIVE
+  ENDED
+  CANCELLED
+}
+
+enum SorteioStatus {
+  ACTIVE
+  ENDED
+  CANCELLED
+}
+
+enum PaymentMethod {
+  PIX
+  CREDIT_CARD
+  INTERNAL_COINS
+}
+
+enum PaymentStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  CANCELLED
+  REFUNDED
+}
+
+enum PayoutStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+enum PixKeyType {
+  CPF
+  CNPJ
+  EMAIL
+  PHONE
+  RANDOM
+}
+
+enum NotificationType {
+  INFO
+  SUCCESS
+  WARNING
+  ERROR
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  CANCELLED
+  EXPIRED
+  SUSPENDED
+} 

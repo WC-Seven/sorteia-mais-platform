@@ -408,3 +408,238 @@
 🌐 <www.sorteia.plus>
 
 > © 2025 Sorteia+ – Todos os direitos reservados.
+
+## 🏗️ **Estrutura no GitHub**
+
+### **Repositório Principal:**
+
+```
+github.com/wellington-monteiro/sorteia-mais/
+```
+
+---
+
+## 📁 **Estrutura de Pastas:**
+
+```
+sorteia-mais/
+├── 📁 backend/                    # API REST
+│   ├── 📁 src/
+│   │   ├──  modules/
+│   │   │   ├── 📁 core/          # Autenticação, usuários
+│   │   │   ├── 📁 rifas/         # Gestão de rifas
+│   │   │   ├── 📁 vaquinhas/     # Campanhas de arrecadação
+│   │   │   ├──  sorteios/      # Sorteios aleatórios
+│   │   │   ├── 📁 afiliados/     # Programa de indicação
+│   │   │   ├── 📁 assinaturas/   # Planos PRO/PRO+
+│   │   │   └── 📁 payments/      # Integração Pix/Stripe
+│   │   ├── 📁 config/
+│   │   ├──  utils/
+│   │   └── 📁 types/
+│   ├── 📁 prisma/                # Schema do banco
+│   ├── 📁 tests/
+│   ├──  package.json
+│   ├── 📄 yarn.lock
+│   ├── 📄 tsconfig.json
+│   └──  README.md
+│
+├── 📁 frontend/                   # Interface Web
+│   ├── 📁 src/
+│   │   ├──  app/               # Next.js App Router
+│   │   │   ├──  (auth)/        # Páginas de autenticação
+│   │   │   ├── 📁 dashboard/     # Dashboard do usuário
+│   │   │   ├──  rifas/         # Páginas de rifas
+│   │   │   ├──  vaquinhas/     # Páginas de vaquinhas
+│   │   │   ├──  sorteios/      # Páginas de sorteios
+│   │   │   ├──  afiliados/     # Páginas de afiliados
+│   │   │   ├── 📁 pricing/       # Planos e preços
+│   │   │   ├── 📄 globals.css
+│   │   │   └──  layout.tsx
+│   │   ├──  components/        # Componentes reutilizáveis
+│   │   │   ├──  ui/           # Shadcn/ui components
+│   │   │   ├── 📁 forms/        # Formulários
+│   │   │   ├── 📁 layout/       # Componentes de layout
+│   │   │   └── 📁 modules/      # Componentes específicos
+│   │   ├── 📁 lib/              # Utilitários e configurações
+│   │   ├── 📁 hooks/            # Custom hooks
+│   │   ├── 📁 stores/           # Estado global (Zustand)
+│   │   └── 📁 types/            # Tipos TypeScript
+│   ├── 📁 public/               # Assets estáticos
+│   ├──  package.json
+│   ├── 📄 yarn.lock
+│   ├──  next.config.ts
+│   ├──  tailwind.config.js
+│   └──  README.md
+│
+├── 📁 shared/                     # Tipos e utilitários compartilhados
+│   ├──  types/
+│   │   ├── 📄 auth.ts           # Tipos de autenticação
+│   │   ├── 📄 rifas.ts          # Tipos de rifas
+│   │   ├── 📄 vaquinhas.ts      # Tipos de vaquinhas
+│   │   ├── 📄 sorteios.ts       # Tipos de sorteios
+│   │   ├── 📄 afiliados.ts      # Tipos de afiliados
+│   │   ├── 📄 payments.ts       # Tipos de pagamentos
+│   │   └── 📄 index.ts          # Exportações principais
+│   ├──  utils/
+│   │   ├── 📄 validation.ts     # Schemas Zod
+│   │   ├── 📄 constants.ts      # Constantes
+│   │   └── 📄 helpers.ts        # Funções auxiliares
+│   ├──  package.json
+│   ├── 📄 tsconfig.json
+│   └──  README.md
+│
+├── 📁 docs/                       # Documentação do projeto
+│   ├──  arquitetura.md
+│   ├── 📄 api-documentation.md
+│   ├── 📄 deployment-guide.md
+│   └──  contributing.md
+│
+├── 📄 .gitignore                 # Arquivos ignorados pelo Git
+├── 📄 package.json               # Configuração do projeto raiz
+├── 📄 README.md                  # Documentação principal
+└── 📄 LICENSE                    # Licença do projeto
+```
+
+---
+
+## 🔗 **Links dos Repositórios:**
+
+### **1. Repositório Principal:**
+
+```
+https://github.com/wellington-monteiro/sorteia-mais
+```
+
+### **2. Deploy URLs (futuro):**
+
+```
+Frontend: https://sorteia-mais.vercel.app
+Backend:  https://sorteia-mais-backend.railway.app
+```
+
+---
+
+## 📋 **Estrutura de Branches:**
+
+```
+main/                    # Branch principal (produção)
+├── develop/            # Branch de desenvolvimento
+├── feature/rifas/      # Feature: módulo de rifas
+├── feature/vaquinhas/  # Feature: módulo de vaquinhas
+├── feature/sorteios/   # Feature: módulo de sorteios
+├── feature/afiliados/  # Feature: módulo de afiliados
+├── feature/payments/   # Feature: módulo de pagamentos
+└── hotfix/             # Correções urgentes
+```
+
+---
+
+## 🚀 **Workflow de Desenvolvimento:**
+
+### **1. Estrutura de Commits:**
+
+```
+feat: adiciona módulo de rifas
+├── backend: implementa API de rifas
+├── frontend: adiciona interface de rifas
+└── shared: atualiza tipos de rifas
+
+fix: corrige validação de preços
+├── shared: atualiza schema de validação
+└── backend: aplica nova validação
+
+docs: atualiza documentação da API
+└── docs: adiciona exemplos de uso
+```
+
+### **2. Pull Requests:**
+
+```
+feature/rifas → develop → main
+```
+
+---
+
+## 📊 **Visão Geral no GitHub:**
+
+### **Página Principal:**
+
+```
+🎯 Sorteia+ - Plataforma de Rifas, Sorteios e Vaquinhas
+
+📦 Backend API (Node.js + Express + TypeScript)
+ Frontend Web (Next.js 14 + React + TypeScript)
+📋 Shared Package (Tipos e utilitários compartilhados)
+
+ Deploy:
+• Frontend: https://sorteia-mais.vercel.app
+• Backend: https://sorteia-mais-backend.railway.app
+
+📚 Documentação: /docs
+```
+
+### **Estatísticas:**
+
+```
+⭐ Stars: 0
+🔄 Forks: 0
+ Watchers: 1
+ Repositories: 1
+🛠️ Language: TypeScript (60%), JavaScript (25%), CSS (15%)
+```
+
+---
+
+## 🎯 **Vantagens desta Estrutura:**
+
+### **1. Organização Clara:**
+
+- Cada projeto tem sua pasta
+- Separação clara de responsabilidades
+- Fácil navegação
+
+### **2. Deploy Independente:**
+
+- Backend pode ser deployado separadamente
+- Frontend pode ser deployado separadamente
+- Shared não precisa deploy
+
+### **3. Desenvolvimento Paralelo:**
+
+- Equipes podem trabalhar em paralelo
+- Mudanças não conflitam
+- Versionamento independente
+
+### **4. Manutenibilidade:**
+
+- Código organizado por módulos
+- Documentação centralizada
+- Histórico unificado
+
+---
+
+## 🚀 **Próximos Passos:**
+
+1. **Criar repositório no GitHub:**
+
+   ```
+   github.com/wellington-monteiro/sorteia-mais
+   ```
+
+2. **Fazer push do código:**
+
+   ```bash
+   git remote add origin https://github.com/wellington-monteiro/sorteia-mais.git
+   git push -u origin main
+   ```
+
+3. **Configurar deploy automático:**
+   - Vercel para frontend
+   - Railway para backend
+
+4. **Começar desenvolvimento:**
+   - Implementar módulo Core (autenticação)
+   - Implementar módulo Rifas
+   - Implementar módulo Vaquinhas
+
+**Quer que eu ajude a criar o repositório no GitHub agora?** 🚀
