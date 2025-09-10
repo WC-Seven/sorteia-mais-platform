@@ -1,0 +1,10 @@
+---
+description: Sempre implemente **uma funcionalidade por vez**. Se o prompt for grande ou envolver mútiplas funcionanlidades, **divida em partes menores** e confirme escopo de cada uma antes de gerar código.
+globs:
+alwaysApply: true
+---
+
+- Antes de inciar, questione e esclareça o escopo se houver ambiguidade.
+- Não mistuyre múltiplas funcionalidades em uma única entrega.
+- Se necessário, peça confirmação do usuário, sobre qual funcionalidade priorizar.
+- Documente cada entrega de forma clara e objetiva.

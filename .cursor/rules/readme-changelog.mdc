@@ -1,0 +1,10 @@
+---
+description: Atualização de README e changelog
+globs:
+alwaysApply: true
+---
+
+- Toda nova funcionalidade implementada deve ser **explicada no README.md**.
+- Qualquer mudança relevante (novas features, correções, breaking changes) deve ser **listadas no CHANGELOG.md**.
+
+Isso garante que a documentação do projeto esteja sempre atualizada, facilitando o onboarding de novos desenvolvedores e acompanhamentos da evolução do sistema.

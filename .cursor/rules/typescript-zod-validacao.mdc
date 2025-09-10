@@ -1,0 +1,27 @@
+---
+description: Validação de dados com Typescript + Zod
+globs:
+alwaysApply: true
+---
+
+- Verifique se já tem instalado a biblioteca Zod, se não, instale-a.
+- Utilize **Typescript** e **Zod** para validar todos os dados de entrada, sejam eles provenientes de formulários, APIs ou outras fontes externas.
+- Sempre trate erros de validação exibindo mensagens claras e informativas para o usuário ou consumidor da API.
+- Não permita que dados não validados avancem no fluxo da aplicação.
+- Centralize os schemas de validação para facilitar a manutenção e reuso.
+
+Exemplo:
+```ts
+import { z } from 'zod';
+
+const schema = z.object({
+    email: z.string().email(),
+    senha: z.string().min(8),
+});
+
+try{
+    schema.parse(dadosrecebidos);
+}catch(e){
+    // trate o erro e forneça mensagem clara
+}
+```
